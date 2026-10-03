@@ -1,0 +1,39 @@
+EMPLOYEE MANAGEMENT SYSTEM - QUICK START
+
+The application manages employees, departments, monthly payroll, and workday attendance using Swing -> service -> repository -> MySQL.
+
+REQUIREMENTS
+- JDK 8 or newer
+- MySQL Server running
+- Connector/J JAR at lib\mysql-connector-j-26.7.0.jar
+- A MySQL user with permission to create the database and tables
+- Run commands from the project root
+
+RUN
+
+From PowerShell, run .\run.ps1. It compiles the project with Connector/J and securely prompts for the MySQL password when needed.
+
+Optional settings: EMS_DB_HOST, EMS_DB_PORT, EMS_DB_NAME, EMS_DB_USER. Defaults are localhost, 3306, employee_management, and root.
+
+DEMO LOGIN
+- Username: admin
+- Password: admin123
+
+MODULES
+- EmployeePanel: employee CRUD and search
+- DepartmentPanel: department CRUD and search
+- SalaryPanel: monthly base salary, bonus, deductions, and net salary
+- EmployeeAttendancePanel: employee workday attendance by department
+- EmployeeReportPanel: employee, department, payroll, and attendance reports
+
+ARCHITECTURE
+
+Main -> AppSession -> DashboardFrame
+Dashboard panels -> Services -> Repository interfaces -> JDBC repositories -> MySQL
+DemoData seeds departments, employees, payroll, and attendance only when each table is empty.
+
+Employee, Department, Salary, and Attendance each have model, service, repository interface, and JDBC repository layers. In-memory implementations remain available. DBConnection creates the schema during startup. Person is the shared abstract model; Teacher remains an Employee specialization. ReportGenerator defines the report contract.
+
+STORAGE
+
+The app uses MySQL for persistence. It reads credentials from environment variables and creates the database and tables on first launch.
