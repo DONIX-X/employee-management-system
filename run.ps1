@@ -42,8 +42,10 @@ if (-not $env:EMS_DB_PORT) { $env:EMS_DB_PORT = '3306' }
 if (-not $env:EMS_DB_NAME) { $env:EMS_DB_NAME = 'employee_management' }
 if (-not $env:EMS_DB_USER) { $env:EMS_DB_USER = 'root' }
 if (-not $env:EMS_DB_PASSWORD) {
-    Write-Host "No MySQL password configured. Starting in offline demo mode."
-    $env:EMS_DB_PASSWORD = ''
+    $securePassword = Read-Host "MySQL password for '$env:EMS_DB_USER' (press Enter if none)" -AsSecureString
+    $credential = New-Object System.Management.Automation.PSCredential('mysql', $securePassword)
+    $env:EMS_DB_PASSWORD = $credential.GetNetworkCredential().Password
+    Remove-Variable securePassword, credential
 }
 
 $jar = Join-Path $root 'lib\mysql-connector-j-26.7.0.jar'

@@ -31,10 +31,15 @@ public class Main {
             AppSession.initialize();
         } catch (RuntimeException exception) {
             String message = "Unable to initialize the Employee Management System.\n"
-                    + exception.getMessage()
-                    + "\nThe app will continue in offline demo mode if possible.";
-            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, message,
+                    + exception.getMessage();
+            Throwable cause = exception.getCause();
+            if (cause != null && cause.getMessage() != null && !cause.getMessage().isBlank()) {
+                message += "\n\nMySQL details: " + cause.getMessage();
+            }
+            String errorMessage = message;
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, errorMessage,
                     "Initialization Error", JOptionPane.ERROR_MESSAGE));
+            return;
         }
 
         SwingUtilities.invokeLater(() -> {

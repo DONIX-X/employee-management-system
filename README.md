@@ -94,14 +94,19 @@ EmployeeManagementSystem/
 
 ### Steps
 
-1. Optionally set `EMS_DB_HOST`, `EMS_DB_PORT`, `EMS_DB_NAME`, and `EMS_DB_USER`. Defaults are `localhost`, `3306`, `employee_management`, and `root`.
+1. If your database is not named `employee_management` or your MySQL account is not `root`, set `EMS_DB_NAME` and `EMS_DB_USER` in PowerShell before launching. For example:
+   ```powershell
+   $env:EMS_DB_NAME = 'your_database_name'
+   $env:EMS_DB_USER = 'your_mysql_user'
+   ```
+   For a remote MySQL server, also set `EMS_DB_HOST` and, if needed, `EMS_DB_PORT`. Defaults are `localhost` and `3306`.
 
-2. From the project root, run the launcher. It compiles all Java sources with Connector/J and securely prompts for the database password if `EMS_DB_PASSWORD` is not already set:
+2. From the project root, run the launcher. It compiles all Java sources with Connector/J and securely prompts for the database password if `EMS_DB_PASSWORD` is not already set. The MySQL account needs permission to create the database (if missing) and tables:
    ```powershell
    .\run.ps1
    ```
 
-   On startup, the app creates the database and tables if they do not exist, then seeds demo data only when the corresponding tables are empty.
+   On startup, the app creates the database and tables if they do not exist, then seeds demo data only when the corresponding tables are empty. If MySQL connection settings were provided but the connection fails, the app shows an error instead of silently using temporary in-memory data. To intentionally run offline, start the Java application without setting `EMS_DB_PASSWORD`.
 
 3. **Login with demo credentials**
    - Username: `admin`

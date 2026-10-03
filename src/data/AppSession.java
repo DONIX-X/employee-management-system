@@ -62,12 +62,19 @@ public final class AppSession {
     }
 
     private static boolean canUseDatabase() {
+        if (System.getenv("EMS_DB_PASSWORD") == null) {
+            System.out.println("No MySQL password configured; starting in offline demo mode.");
+            return false;
+        }
+
         try {
             DBConnection.initializeDatabase();
             return true;
         } catch (SQLException | RuntimeException exception) {
-            System.out.println("MySQL unavailable; switching to in-memory demo mode: " + exception.getMessage());
-            return false;
+            throw new IllegalStateException(
+                    "Could not connect to MySQL. Check the host, port, database name, username, password, "
+                            + "and database privileges.",
+                    exception);
         }
     }
 
